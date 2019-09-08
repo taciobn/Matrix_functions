@@ -1,17 +1,35 @@
 package com.company;
 
 public class Matrix {
-     public int matriz[][];
+     public double matriz[][];
     public int linhas;
     public int colunas;
 
-    public Matriz(int linha, int coluna) {
+    public Matrix(int linha, int coluna) {
         this.linhas = linha;
         this.colunas = coluna;
-        matriz = new int[linhas][colunas];
+        matriz = new double[linhas][colunas];
         for (int i = 0; i < this.linhas; i++) {
             for (int j = 0; j < this.colunas; j++) {
                 matriz[i][j] = (int) (Math.random() * (50 - 1) + 1);
+            }
+        }
+    }
+
+    public Matrix(int linhas, int colunas, int valor) {
+        this.linhas = linhas;
+        this.colunas = colunas;
+        for (int i = 0; i < this.linhas; i++) {
+            for (int j = 0; j < this.colunas; j++) {
+                matriz[i][j] = valor;
+            }
+        }
+    }
+
+    public Matrix(double m[][]) {
+        for (int i = 0; i < m.length; i++) {
+            for (int j = 0; j < m[0].length; j++) {
+                matriz[i][j] = m[i][j];
             }
         }
     }
@@ -25,16 +43,8 @@ public class Matrix {
         }
     }
 
-    public void tipoMatriz() {
-        if (this.linhas == 1) {
-            System.out.println("Matriz Linha");
-        } else if (this.colunas == 1) {
-            System.out.println("Matriz Coluna");
-        } else if (this.linhas == this.colunas) {
-            System.out.println("Matriz Quadrada de ordem " + this.linhas);
-        } else {
-            System.out.println("Matriz nao é especial");
-        }
+    public static boolean tipoMatriz(double matriz[][]) {
+        return matriz.length == matriz[0].length;
     }
 
     public void diagonalPrincipal() {
@@ -47,7 +57,7 @@ public class Matrix {
                     }
                     System.out.print("\t");
                 }
-                System.out.println( );
+                System.out.println();
             }
             System.out.println();
         }
@@ -55,17 +65,66 @@ public class Matrix {
 
     public void diagonalSecundaria() {
         System.out.println("A diagonal secundaria é: ");
-        if(this.linhas==this.colunas){
+        if (this.linhas == this.colunas) {
             for (int i = 0; i < this.linhas; i++) {
                 for (int j = 0; j < this.colunas; j++) {
-                    if ((i+j)==(matriz.length-1)) {
+                    if ((i + j) == (matriz.length - 1)) {
                         System.out.print(matriz[i][j]);
                     }
                     System.out.print(" \t");
                 }
                 System.out.println();
             }
-            System.out.println( );
+            System.out.println();
+        }
+
+    }
+
+    public double[][] somaMatriz(double m1[][], double m2[][]) {
+        if (m1.length == m2.length && m1[0].length == m2[0].length) {
+            for (int i = 0; i < m1.length; i++) {
+                for (int j = 0; j < m1[0].length; j++) {
+                    matriz[i][j] = (m1[i][j] + m2[i][j]);
+                }
+            }
+            return matriz;
+        } else {
+            return null;
+        }
+    }
+
+    public double[][] subtraçaoMatriz(double m1[][], double m2[][]) {
+        if (m1.length == m2.length && m1[0].length == m2[0].length) {
+            for (int i = 0; i < m1.length; i++) {
+                for (int j = 0; j < m1[0].length; j++) {
+                    matriz[i][j] = (m1[i][j] - m2[i][j]);
+                }
+            }
+            return matriz;
+        } else {
+            return null;
+        }
+
+    }
+
+    public double[][] multMatriz(double m1[][], double m2[][]) {
+        if (m1[0].length == m2.length) {
+            double aux = 0;
+            int cont = 0;
+            for (int i = 0; i < m1.length; i++) {
+                for (int j = 0; j < m2[0].length; j++) {
+                    aux = aux + (m1[i][j] * m2[j][i]);
+                }
+                matriz[i][cont] = aux;
+                cont = cont + 1;
+                if (cont >= m2.length) {
+                    cont = 0;
+                }
+            }
+            return matriz;
+            
+        } else {
+            return null;
         }
 
     }
