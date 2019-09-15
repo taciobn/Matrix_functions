@@ -1,7 +1,8 @@
 package com.company;
 
 public class Matrix {
-     public double matriz[][];
+
+    public double matriz[][];
     public int linhas;
     public int colunas;
 
@@ -43,10 +44,6 @@ public class Matrix {
         }
     }
 
-    public static boolean tipoMatriz(double matriz[][]) {
-        return matriz.length == matriz[0].length;
-    }
-
     public void diagonalPrincipal() {
         if (this.colunas == this.linhas) {
             System.out.println("A diaginal principal é: ");
@@ -80,52 +77,110 @@ public class Matrix {
 
     }
 
-    public double[][] somaMatriz(double m1[][], double m2[][]) {
-        if (m1.length == m2.length && m1[0].length == m2[0].length) {
-            for (int i = 0; i < m1.length; i++) {
-                for (int j = 0; j < m1[0].length; j++) {
-                    matriz[i][j] = (m1[i][j] + m2[i][j]);
+    public Matrix somaMatriz(Matrix m) {
+        if (m.linhas == this.linhas && m.colunas == this.colunas) {
+            Matrix m1 = new Matrix(this.linhas, this.colunas);
+            for (int i = 0; i < m.linhas; i++) {
+                for (int j = 0; j < m.colunas; j++) {
+                    m1.matriz[i][j] = (m.matriz[i][j] + this.matriz[i][j]);
                 }
             }
-            return matriz;
+            return m1;
         } else {
             return null;
         }
     }
 
-    public double[][] subtraçaoMatriz(double m1[][], double m2[][]) {
-        if (m1.length == m2.length && m1[0].length == m2[0].length) {
-            for (int i = 0; i < m1.length; i++) {
-                for (int j = 0; j < m1[0].length; j++) {
-                    matriz[i][j] = (m1[i][j] - m2[i][j]);
+    public Matrix subtraçaoMatriz(Matrix m) {
+
+        if (m.linhas == this.linhas && m.colunas == this.colunas) {
+            Matrix m1 = new Matrix(this.linhas, this.colunas);
+            for (int i = 0; i < m.linhas; i++) {
+                for (int j = 0; j < m.colunas; j++) {
+                    m1.matriz[i][j] = (this.matriz[i][j] - m.matriz[i][j]);
                 }
             }
-            return matriz;
+            return m1;
         } else {
             return null;
         }
 
     }
 
-    public double[][] multMatriz(double m1[][], double m2[][]) {
-        if (m1[0].length == m2.length) {
-            double aux = 0;
-            int cont = 0;
-            for (int i = 0; i < m1.length; i++) {
-                for (int j = 0; j < m2[0].length; j++) {
-                    aux = aux + (m1[i][j] * m2[j][i]);
-                }
-                matriz[i][cont] = aux;
-                cont = cont + 1;
-                if (cont >= m2.length) {
-                    cont = 0;
+    public Matrix multMatriz(Matrix m) {
+        Matrix m1 = new Matrix(this.linhas, m.colunas, 0);
+        for (int i = 0; i < m1.linhas; i++) {
+            for (int j = 0; j < m1.colunas; j++) {
+                for (int k = 0; k < m1.colunas; k++) {
+                    m1.matriz[i][j] += this.matriz[i][k] * m.matriz[j][k];
+
                 }
             }
-            return matriz;
-            
-        } else {
-            return null;
-        }
 
+        }
+        return m1;
+    }
+
+    public double detMatriz() {
+        double neg1 = 1, neg2 = 1, neg3 = 1;
+        double pos1 = 1, pos2 = 1, pos3 = 1;
+        if ((this.linhas == this.colunas) == true) {
+            if (this.linhas == 2) {
+                double aux = this.matriz[0][0] * this.matriz[1][1];
+                double aux2 = this.matriz[0][1] * this.matriz[1][0];
+                return aux - aux2;
+            } else if (this.linhas == 3) {
+
+                Matrix m = new Matrix(this.linhas, this.colunas + 2);
+                for (int i = 0; i < this.linhas; i++) {
+                    for (int j = 0; j < this.colunas; j++) {
+                        m.matriz[i][j] = this.matriz[i][j];
+                    }
+                }
+                for (int i = 0; i < this.linhas - 1; i++) {
+                    for (int j = 0; j < this.colunas - 1; j++) {
+                        m.matriz[i][j + 3] = this.matriz[i][j];
+                    }
+                }
+                for (int i = 0; i < m.linhas; i++) {
+                    for (int j = 0; j < m.colunas; j++) {
+                        switch (i + j) {
+                            case 2:
+                                neg1 *= this.matriz[i][j];
+                                break;
+                            case 3:
+                                neg2 *= this.matriz[i][j];
+                                break;
+                            case 4:
+                                neg3 *= this.matriz[i][j];
+                                break;
+                            default:
+                                break;
+                        }
+                        if (i == j) {
+                            pos1 *= this.matriz[i][j];
+                        }
+                    }
+                }
+                int cont = 0;
+                for (int i = 0; i < this.linhas - 1; i++) {
+                    switch (cont - i) {
+                        case 1:
+                            pos2 *= this.matriz[cont][i];
+                            cont++;
+                            break;
+                        case 2:
+                            pos3 *= this.matriz[cont][i];
+                            cont++;
+                        default:
+                            break;
+                    }
+                    
+                }
+            }
+        } else {
+            System.out.println("---");
+        }
+        return (pos1 + pos2 + pos3) - (neg1 + neg2 + neg3);
     }
 }
