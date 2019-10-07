@@ -121,7 +121,7 @@ public class Matrix {
         return m1;
     }
 
-    public double detMatriz() {
+    public double detMatriz1() {
         double neg1 = 1, neg2 = 1, neg3 = 1;
         double pos1 = 1, pos2 = 1, pos3 = 1;
         if ((this.linhas == this.colunas) == true) {
@@ -134,7 +134,13 @@ public class Matrix {
                 Matrix m = new Matrix(this.linhas, this.colunas + 2);
                 for (int i = 0; i < this.linhas; i++) {
                     for (int j = 0; j < this.colunas; j++) {
-                        m.matriz[i][j] = this.matriz[i][j];
+
+                        if (j > 3) {
+                            int jj=j-3;
+                            m.matriz[i][j] = this.matriz[i][jj];
+                        }else{
+                            m.matriz[i][j] = this.matriz[i][j];
+                        }
                     }
                 }
                 for (int i = 0; i < this.linhas - 1; i++) {
@@ -175,12 +181,36 @@ public class Matrix {
                         default:
                             break;
                     }
-                    
+
                 }
             }
-        } else {
-            System.out.println("---");
         }
         return (pos1 + pos2 + pos3) - (neg1 + neg2 + neg3);
+    }
+
+    public double detMatriz2() {
+        Matrix matrix;
+        matrix = new Matrix(this.linhas - 1, this.colunas - 1, 0);
+        double det = 0;
+        int contj = 0;
+        double aux;
+        for (int i = 0; i > this.matriz.length; i++) {
+            for (int j = 0; j < this.colunas; j++) {
+                if (i == 0 || j == contj) {
+
+                } else {
+                    if (j < contj) {
+                        matrix.matriz[i][j] = this.matriz[(i - 1)][j];
+                    } else if (j > contj) {
+                        matrix.matriz[i][j] = this.matriz[(i - 1)][(j - 1)];
+                    }
+                }
+
+                aux = Math.pow((-1), (i + contj));
+                det += aux * (matrix.detMatriz1());
+
+            }//acaba o for j
+        }//acaba o for i
+        return det;
     }
 }
